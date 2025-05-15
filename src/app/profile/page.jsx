@@ -1,7 +1,6 @@
 "use client";
 import styles from "./Profile.module.css";
 import {Button, Card, Flex, Skeleton, Typography} from "antd"
-import { Kings } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
 

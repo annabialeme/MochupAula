@@ -86,51 +86,99 @@ export default function Alunos() {
 
   return (
     <div>
-        <h1>Lista de Alunos</h1>
-   
+      <h1>Lista de Alunos</h1>
 
-    <Pagination
-    current={data.current}
-    pageSize={data.pageSize}
-    total={data.alunos.length}
-    onChange={(page, size) =>
-        setData((d) => ({...d, current: page, pageSize: size}))
-}
-showSizeChanger
-pageSizeOptions={["5", "10", "100"]}
-
-/>
-
-{data.loading ? (
-    <Image
-    src="/images.gavic.gif"
-    width={300}
-    height={200}
-    alt="Loading"
-
-    />
-) : (
-    <div className={styles.cardsContainer}>
-        {paginatedAlunos().map((aluno) => 
-        <Card>
-            key={aluno.id}
-        className={styles.card}
-        houverable
-        onClick={() => openModal(aluno)}
-        cover={
-            <Image
-            alt={aluno.name_estudante}
-            src={aluno.photo ? aluno.photo : "/images/220.svg"}
-            width={220}
-            height={220}
-            />
+      <Pagination
+        current={data.current}
+        pageSize={data.pageSize}
+        total={data.alunos.length}
+        onChange={(page, size) =>
+          setData((d) => ({ ...d, current: page, pageSize: size }))
         }
-        >
-            <Card.Meta
-            title={aluno.name_estudante}
-            />
-        </Card>
-            
-    ))}
+        showSizeChanger
+        pageSizeOptions={["5", "10", "100"]}
+      />
+
+      {data.loading ? (
+        <Image
+          src="/images/gavic.gif"
+          width={300}
+          height={200}
+          alt="Loading"
+        />
+      ) : (
+        <div className={styles.cardsContainer}>
+          {paginatedAlunos().map((aluno) => (
+            <Card
+              key={aluno.id}
+              className={styles.card}
+              hoverable
+              onClick={() => openModal(aluno)}
+              cover={
+                <Image
+                  alt={aluno.name_estudante}
+                  src={aluno.photo ? aluno.photo : "/images/220.svg"}
+                  width={220}
+                  height={220}
+                />
+              }
+            >
+              <Card.Meta
+                title={aluno.name_estudante}
+              />
+            </Card>
+          ))}
+        </div>
+      )}
+
+      <Modal
+        title={`Avaliação de ${modalInfo.aluno?.name_estudante}`}
+        open={modalInfo.visible}
+        onCancel={() =>
+          setModalInfo({
+            visible: false,
+            aluno: null,
+            avaliacao: null,
+            loading: false,
+          })
+        }
+        onOk={() =>
+          setModalInfo({
+            visible: false,
+            aluno: null,
+            avaliacao: null,
+            loading: false,
+          })
+        }
+        width={600}
+      >
+        {modalInfo.loading ? (
+          <Skeleton active />
+        ) : modalInfo.avaliacao ? (
+          <div className={styles.avaliacaoInfo}>
+            <p>
+              <span className={styles.label}>Nota:</span>{" "}
+              {modalInfo.avaliacao.nota}
+            </p>
+            <p>
+              <span className={styles.label}>Professor:</span>{" "}
+              {modalInfo.avaliacao.professor}
+            </p>
+            <p>
+              <span className={styles.label}>Matéria:</span>{" "}
+              {modalInfo.avaliacao.materia}
+            </p>
+            <p>
+              <span className={styles.label}>Sala:</span>{" "}
+              {modalInfo.avaliacao.sala}
+            </p>
+          </div>
+        ) : (
+          <p style={{ textAlign: "center" }}>Avaliação não encontrada.</p>
+        )}
+      </Modal>
+
+      <ToastContainer position="top-right" autoClose={4500} />
     </div>
-)}
+  );
+}
